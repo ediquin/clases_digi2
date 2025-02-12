@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase Magistral - Sistemas Digitales II</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-left: 5px solid #007BFF;
+            background: #e9f5ff;
+        }
+        .image-placeholder {
+            width: 100%;
+            height: 200px;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Clase Magistral: Sistemas Digitales II</h1>
+        <h2>Diferencias entre Sistemas Combinacionales y Secuenciales</h2>
+        
+        <div class="section">
+            <h3>1. Introducción</h3>
+            <p>Los sistemas digitales se dividen en combinacionales y secuenciales. Comprender sus diferencias es esencial para diseñar circuitos eficientes.</p>
+            <img src="https://electronicaonline.net/electronica/circuitos-logicos/" alt="">
+            <img src="https://www.ingmecafenix.com/electronica/digital/circuitos-combinacionales-y-secuenciales/" alt="">
+        </div>
+        
+        <div class="section">
+            <h3>2. Sistemas Combinacionales</h3>
+            <p>Los circuitos combinacionales son aquellos cuya salida depende únicamente de las entradas actuales. Ejemplos comunes incluyen sumadores, multiplexores y decodificadores.</p>
+            <img src="https://i.ytimg.com/vi/7qJSQClaSyk/sddefault.jpg" alt="">
+        </div>
+        
+        <div class="section">
+            <h3>3. Sistemas Secuenciales</h3>
+            <p>Los circuitos secuenciales tienen memoria, lo que significa que sus salidas dependen tanto de las entradas actuales como del estado anterior. Ejemplos incluyen registros, contadores y máquinas de estado finito (FSM).</p>
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh88g3tTGSWDVtOYFXfuip3psAX9qA2yN4j-yzbd8PujDRlEBuIC06mQhFzPdHLB5c9kRLDILwYB8iUq8SFtO6qVQneTDk-398r4KLk6elTyfLeIBhTljvDPR8Fgo5VKa0CIUEyhmgM8nIu/s1600/FSM1.png" alt="">
+            <section>
+                <h2>Sistemas Secuenciales</h2>
+                <p>Los sistemas secuenciales son circuitos lógicos en los que la salida depende no solo de las entradas actuales, 
+                   sino también del estado previo del sistema. Esto se logra mediante el uso de elementos de memoria, como 
+                   <strong>flip-flops</strong> o <strong>registros</strong>, que almacenan información entre ciclos de reloj.</p>
+            
+                <h3>Características Principales</h3>
+                <ul>
+                    <li>Dependen del tiempo y del historial de entradas.</li>
+                    <li>Usan una señal de reloj para sincronizar cambios de estado.</li>
+                    <li>Pueden ser <strong>sincrónicos</strong> (controlados por un reloj) o <strong>asincrónicos</strong> 
+                        (responden inmediatamente a cambios en las entradas).</li>
+                </ul>
+            
+                <h3>Ejemplo: Flip-Flop tipo D</h3>
+                <p>Un flip-flop tipo D almacena un bit y cambia su estado en función de la señal de reloj.</p>
+                <img src="https://circuitossecuenciales.weebly.com/uploads/2/3/7/6/23768053/header_images/1379547935.jpg" alt="">
+            </section>
+        </div>
+        
+        <div class="section">
+            <h3>4. Diferencias Clave</h3>
+            <ul>
+                <li><strong>Memoria:</strong> Los sistemas secuenciales almacenan estados, los combinacionales no.</li>
+                <li><strong>Tiempo:</strong> Los sistemas secuenciales pueden depender del reloj.</li>
+                <li><strong>Ejemplos:</strong> Sumadores vs Contadores.</li>
+                <li><strong>Reloj y Frecuencia:</strong> Los sistemas secuenciales operan en sincronización con una señal de reloj. Esta señal establece la frecuencia con la que el sistema cambia de estado.</li>
+                <li><strong>Latencia:</strong> En los sistemas secuenciales, la latencia depende de la frecuencia del reloj y de los ciclos de procesamiento. En los combinacionales, la latencia es determinada únicamente por la propagación de las señales.</li>
+                <li><strong>Sincronización:</strong> Los sistemas secuenciales pueden ser síncronos o asíncronos. En los sistemas síncronos, todas las operaciones ocurren en sincronización con el reloj, mientras que en los asíncronos, las transiciones de estado pueden ocurrir en cualquier momento en función de las entradas.</li>
+            </ul>
+        </div>
+    
+    
+    </div>
+</body>
+</html>
