@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Desplazamiento con Flip-Flops Tipo D</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            background-color: #1a3a5f;
+            color: white;
+            border-radius: 8px;
+        }
+        
+        h1, h2, h3 {
+            color: #1a3a5f;
+        }
+        
+        header h1 {
+            color: white;
+        }
+        
+        section {
+            background-color: white;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Estilos para el diagrama SVG */
+        #diagramaFlipFlop {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            display: block;
+        }
+        
+        .flip-flop {
+            stroke: #1a3a5f;
+            stroke-width: 2;
+            fill: white;
+        }
+        
+        .connection {
+            stroke: #333;
+            stroke-width: 2;
+        }
+        
+        .clock {
+            stroke: #d9534f;
+            stroke-width: 2;
+        }
+        
+        .data {
+            stroke: #5cb85c;
+            stroke-width: 2;
+        }
+        
+        .output {
+            stroke: #5bc0de;
+            stroke-width: 2;
+        }
+        
+        .label {
+            font-size: 12px;
+            fill: #333;
+            text-anchor: middle;
+        }
+        
+        /* Estilos para el diagrama de tiempos */
+        #diagramaTiempos {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            display: block;
+        }
+        
+        .signal-line {
+            stroke: #333;
+            stroke-width: 2;
+        }
+        
+        .clock-line {
+            stroke: #d9534f;
+            stroke-width: 2;
+        }
+        
+        .data-line {
+            stroke: #5cb85c;
+            stroke-width: 2;
+        }
+        
+        .q-line-1 {
+            stroke: #5bc0de;
+            stroke-width: 2;
+        }
+        
+        .q-line-2 {
+            stroke: #f0ad4e;
+            stroke-width: 2;
+        }
+        
+        .q-line-3 {
+            stroke: #9c27b0;
+            stroke-width: 2;
+        }
+        
+        .timing-label {
+            font-size: 12px;
+            fill: #333;
+        }
+        
+        .highlight {
+            fill: rgba(255, 0, 0, 0.2);
+            stroke: none;
+        }
+        
+        /* Estilos para la sección interactiva */
+        .controles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        
+        button {
+            background-color: #1a3a5f;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #0d1f33;
+        }
+        
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        
+        .checkbox-container label {
+            margin-left: 10px;
+        }
+        
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 300px;
+            margin: 10px auto;
+        }
+        
+        .slider-container label {
+            margin-bottom: 5px;
+        }
+        
+        /* Estilos para recursos adicionales */
+        .recursos ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .recursos li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .recursos li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #1a3a5f;
+        }
+        
+        .faq details {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .faq summary {
+            font-weight: bold;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .faq details[open] summary {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        /* Estilo para la sección de simulación en vivo */
+        .live-simulation {
+            background-color: #f0f7ff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #d0e4ff;
+            margin-top: 20px;
+        }
+        
+        /* Animación para el reloj */
+        @keyframes pulseClock {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        
+        .clock-pulse {
+            animation: pulseClock 1s infinite;
+        }
+        
+        /* Estilos responsivos */
+        @media (max-width: 768px) {
+            section {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            h2 {
+                font-size: 20px;
+            }
+            
+            .controles {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Registro de Desplazamiento con Flip-Flops Tipo D</h1>
+        <p>Un recurso interactivo para comprender los registros de desplazamiento y el flanco descendente</p>
+    </header>
+    
+    <section id="introduccion">
+        <h2>1. Introducción Teórica</h2>
+        
+        <h3>¿Qué es un Flip-Flop tipo D?</h3>
+        <p>Un <strong>Flip-Flop tipo D</strong> (Data o Delay) es un circuito secuencial básico que almacena un bit de información. Su característica principal es que la entrada D (Data) se transfiere a la salida Q cuando ocurre un evento de reloj específico (flanco ascendente o descendente). Entre eventos de reloj, el flip-flop mantiene su estado, lo que lo convierte en un elemento de memoria.</p>
+        
+        <p>La ecuación característica de un Flip-Flop tipo D es simplemente: <strong>Q<sub>siguiente</sub> = D</strong></p>
+        
+        <p>A diferencia de otros tipos de flip-flops (como los JK o SR), el flip-flop D tiene una única entrada de datos, lo que lo hace más sencillo de utilizar y entender. Esta simplicidad lo convierte en un componente fundamental para muchas aplicaciones digitales.</p>
+        
+        <h3>Importancia en el Diseño Digital</h3>
+        <p>Los flip-flops tipo D son componentes esenciales en el diseño de sistemas digitales por varias razones:</p>
+        <ul>
+            <li><strong>Sincronización:</strong> Permiten sincronizar operaciones con una señal de reloj, garantizando que los cambios ocurran en momentos predecibles.</li>
+            <li><strong>Almacenamiento:</strong> Funcionan como elementos de memoria básicos, permitiendo almacenar estados.</li>
+            <li><strong>Estabilidad:</strong> Ayudan a prevenir condiciones de carrera y glitches al sincronizar las transiciones.</li>
+            <li><strong>Versatilidad:</strong> Son los bloques fundamentales para construir registros, contadores, máquinas de estado y otros circuitos secuenciales complejos.</li>
+        </ul>
+        
+        <h3>Desplazamiento de Bits y Sistemas Secuenciales</h3>
+        <p>El <strong>desplazamiento de bits</strong> es una operación fundamental en sistemas digitales que consiste en mover bits de datos de una posición a otra dentro de una secuencia. Este proceso es análogo a una "línea de montaje" digital donde la información se transfiere secuencialmente.</p>
+        
+        <p>En sistemas secuenciales, el desplazamiento de bits se implementa mediante <strong>registros de desplazamiento</strong>, que son circuitos compuestos por una serie de flip-flops conectados en cascada. Cada vez que ocurre un evento de reloj, los datos se desplazan de un flip-flop al siguiente.</p>
+        
+        <p>Aplicaciones comunes de los registros de desplazamiento incluyen:</p>
+        <ul>
+            <li>Conversión serie-paralelo y paralelo-serie de datos</li>
+            <li>Implementación de líneas de retardo digital</li>
+            <li>Generación de secuencias de bits específicas</li>
+            <li>Almacenamiento temporal de datos</li>
+            <li>Filtrado digital</li>
+        </ul>
+        
+        <p>En este recurso, nos centraremos en un registro de desplazamiento de 3 bits activado por flanco descendente, lo que significa que la transferencia de datos ocurre cuando la señal de reloj pasa de nivel alto a nivel bajo.</p>
+    </section>
+    
+    <section id="diagrama">
+        <h2>2. Diagrama de los Flip-Flops</h2>
+        
+        <p>A continuación se muestra un diagrama esquemático de tres flip-flops tipo D conectados en serie para formar un registro de desplazamiento. Cada flip-flop captura el dato en su entrada D cuando ocurre un flanco descendente de la señal de reloj, y lo mantiene en su salida Q hasta el siguiente flanco descendente.</p>
+        
+        <!-- Diagrama SVG de los Flip-Flops conectados en serie -->
+        <svg id="diagramaFlipFlop" viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg">
+            <!-- Flip-Flop 1 -->
+            <rect x="150" y="100" width="100" height="120" class="flip-flop" rx="5" />
+            <text x="200" y="90" class="label" style="font-weight: bold;">Flip-Flop 1</text>
+            <text x="160" y="150" class="label">D</text>
+            <text x="240" y="150" class="label">Q</text>
+            <line x1="150" y1="170" x2="190" y2="170" class="clock" />
+            <text x="170" y="185" class="label">CLK</text>
+            <polygon points="185,170 195,165 195,175" fill="#d9534f" />
+            
+            <!-- Flip-Flop 2 -->
+            <rect x="350" y="100" width="100" height="120" class="flip-flop" rx="5" />
+            <text x="400" y="90" class="label" style="font-weight: bold;">Flip-Flop 2</text>
+            <text x="360" y="150" class="label">D</text>
+            <text x="440" y="150" class="label">Q</text>
+            <line x1="350" y1="170" x2="390" y2="170" class="clock" />
+            <text x="370" y="185" class="label">CLK</text>
+            <polygon points="385,170 395,165 395,175" fill="#d9534f" />
+            
+            <!-- Flip-Flop 3 -->
+            <rect x="550" y="100" width="100" height="120" class="flip-flop" rx="5" />
+            <text x="600" y="90" class="label" style="font-weight: bold;">Flip-Flop 3</text>
+            <text x="560" y="150" class="label">D</text>
+            <text x="640" y="150" class="label">Q</text>
+            <line x1="550" y1="170" x2="590" y2="170" class="clock" />
+            <text x="570" y="185" class="label">CLK</text>
+            <polygon points="585,170 595,165 595,175" fill="#d9534f" />
+            
+            <!-- Conexiones entre Flip-Flops -->
+            <line x1="250" y1="150" x2="350" y2="150" class="connection" />
+            <line x1="450" y1="150" x2="550" y2="150" class="connection" />
+            
+            <!-- Entrada de Datos -->
+            <line x1="50" y1="150" x2="150" y2="150" class="data" />
+            <text x="100" y="140" class="label">Datos de Entrada</text>
+            <circle cx="50" cy="150" r="8" fill="#5cb85c" />
+            
+            <!-- Conexión de Reloj -->
+            <line x1="50" y1="220" x2="650" y2="220" class="clock" />
+            <line x1="100" y1="220" x2="100" y2="170" class="clock" />
+            <line x1="300" y1="220" x2="300" y2="170" class="clock" />
+            <line x1="500" y1="220" x2="500" y2="170" class="clock" />
+            <text x="50" y="240" class="label">Señal de Reloj (CLK)</text>
+            
+            <!-- Salidas -->
+            <line x1="650" y1="150" x2="700" y2="150" class="output" />
+            <text x="675" y="140" class="label">Q (Salida)</text>
+            <circle cx="700" cy="150" r="5" fill="#5bc0de" />
+            
+            <!-- Labels para Q1 y Q2 -->
+            <text x="300" y="140" class="label">Q1</text>
+            <text x="500" y="140" class="label">Q2</text>
+            <text x="700" y="170" class="label">Q3</text>
+        </svg>
+        
+        <div>
+            <h3>Explicación del Diagrama:</h3>
+            <p>En el diagrama anterior se pueden observar los siguientes elementos:</p>
+            <ul>
+                <li><strong>Flip-Flops (FF):</strong> Representados como rectángulos con entradas D y salidas Q.</li>
+                <li><strong>Señal de Reloj (CLK):</strong> Línea roja que conecta a todos los flip-flops, controlando cuándo se capturan los datos.</li>
+                <li><strong>Conexiones en Serie:</strong> La salida Q de cada flip-flop se conecta a la entrada D del siguiente, formando una cadena.</li>
+                <li><strong>Entrada de Datos:</strong> El primer bit que entra al sistema se introduce en la entrada D del primer flip-flop.</li>
+                <li><strong>Salidas:</strong> Cada flip-flop tiene una salida Q que representa el bit almacenado en ese momento.</li>
+            </ul>
+            
+            <p>En esta configuración, cuando ocurre un flanco descendente de reloj:</p>
+            <ol>
+                <li>El FF3 captura el valor que estaba en la salida Q del FF2</li>
+                <li>El FF2 captura el valor que estaba en la salida Q del FF1</li>
+                <li>El FF1 captura el nuevo valor de entrada</li>
+            </ol>
+            
+            <p>Como resultado, los bits se "desplazan" a través del registro, moviendo la información de izquierda a derecha en cada ciclo de reloj.</p>
+        </div>
+    </section>
+    
+    <section id="diagrama-tiempos">
+        <h2>3. Diagrama de Tiempos (Timing Diagram)</h2>
+        
+        <p>El siguiente diagrama de tiempos ilustra cómo los datos se desplazan a través de los tres flip-flops en respuesta a los flancos descendentes de la señal de reloj. Observe cómo cada flip-flop captura el dato en su entrada D únicamente cuando ocurre un flanco descendente (transición de nivel alto a bajo) en la señal de reloj.</p>
+        
+        <!-- Diagrama SVG de los tiempos CORREGIDO para evitar superposición -->
+        <svg id="diagramaTiempos" viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+            <!-- Señal de Reloj -->
+            <text x="30" y="70" class="timing-label" text-anchor="end">CLK</text>
+            <polyline points="50,70 100,70 100,40 200,40 200,70 300,70 300,40 400,40 400,70 500,70 500,40 600,40 600,70 700,70 700,40 750,40" class="clock-line" fill="none" />
+            
+            <!-- Flancos descendentes destacados -->
+            <rect x="195" y="30" width="10" height="250" class="highlight" id="flanco1" />
+            <rect x="395" y="30" width="10" height="250" class="highlight" id="flanco2" />
+            <rect x="595" y="30" width="10" height="250" class="highlight" id="flanco3" />
+            
+            <!-- Datos de entrada -->
+            <text x="30" y="120" class="timing-label" text-anchor="end">Datos</text>
+            <polyline points="50,120 100,120 100,90 250,90 250,120 400,120 400,90 550,90 550,120 700,120 700,90 750,90" class="data-line" fill="none" />
+            <text x="150" y="105" class="timing-label">1</text>
+            <text x="325" y="105" class="timing-label">0</text>
+            <text x="475" y="105" class="timing-label">1</text>
+            <text x="625" y="105" class="timing-label">0</text>
+            
+            <!-- Salida Q1 -->
+            <text x="30" y="170" class="timing-label" text-anchor="end">Q1</text>
+            <polyline points="50,170 200,170 200,140 400,140 400,170 600,170 600,140 750,140" class="q-line-1" fill="none" />
+            <text x="150" y="185" class="timing-label">0</text>
+            <text x="300" y="155" class="timing-label">1</text>
+            <text x="500" y="185" class="timing-label">0</text>
+            <text x="675" y="155" class="timing-label">1</text>
+            
+            <!-- Salida Q2 -->
+            <text x="30" y="220" class="timing-label" text-anchor="end">Q2</text>
+            <polyline points="50,220 300,220 300,190 500,190 500,220 700,220 700,190 750,190" class="q-line-2" fill="none" />
+            <text x="150" y="235" class="timing-label">0</text>
+            <text x="400" y="235" class="timing-label">0</text>
+            <text x="600" y="205" class="timing-label">1</text>
+            <text x="725" y="235" class="timing-label">0</text>
+            
+            <!-- Salida Q3 -->
+            <text x="30" y="270" class="timing-label" text-anchor="end">Q3</text>
+            <polyline points="50,270 400,270 400,240 600,240 600,270 750,270" class="q-line-3" fill="none" />
+            <text x="200" y="285" class="timing-label">0</text>
+            <text x="500" y="255" class="timing-label">1</text>
+            <text x="675" y="285" class="timing-label">0</text>
+            
+            <!-- Eje horizontal (tiempo) DESPLAZADO HACIA ABAJO -->
+            <line x1="50" y1="320" x2="750" y2="320" stroke="#333" stroke-width="2" />
+            <text x="400" y="340" class="timing-label" text-anchor="middle">Tiempo</text>
+            
+            <!-- Marcas de tiempo DESPLAZADAS HACIA ABAJO -->
+            <line x1="100" y1="315" x2="100" y2="325" stroke="#333" stroke-width="2" />
+            <text x="100" y="340" class="timing-label" text-anchor="middle">t0</text>
+            
+            <line x1="200" y1="315" x2="200" y2="325" stroke="#333" stroke-width="2" />
+            <text x="200" y="340" class="timing-label" text-anchor="middle">t1</text>
+            
+            <line x1="300" y1="315" x2="300" y2="325" stroke="#333" stroke-width="2" />
+            <text x="300" y="340" class="timing-label" text-anchor="middle">t2</text>
+            
+            <line x1="400" y1="315" x2="400" y2="325" stroke="#333" stroke-width="2" />
+            <text x="400" y="340" class="timing-label" text-anchor="middle">t3</text>
+            
+            <line x1="500" y1="315" x2="500" y2="325" stroke="#333" stroke-width="2" />
+            <text x="500" y="340" class="timing-label" text-anchor="middle">t4</text>
+            
+            <line x1="600" y1="315" x2="600" y2="325" stroke="#333" stroke-width="2" />
+            <text x="600" y="340" class="timing-label" text-anchor="middle">t5</text>
+            
+            <line x1="700" y1="315" x2="700" y2="325" stroke="#333" stroke-width="2" />
+            <text x="700" y="340" class="timing-label" text-anchor="middle">t6</text>
+        </svg>
+        
+        <div>
+            <h3>Análisis del Diagrama de Tiempos:</h3>
+            <p>En el diagrama se observa cómo los datos se desplazan a través del registro en respuesta a los flancos descendentes de reloj (destacados en rojo):</p>
+            
+            <ul>
+                <li><strong>En t0:</strong> El sistema se inicializa con todos los flip-flops en 0 (Q1=0, Q2=0, Q3=0).</li>
+                <li><strong>En t1:</strong> La entrada de datos cambia a 1.</li>
+                <li><strong>En t2 (primer flanco descendente):</strong> 
+                    <ul>
+                        <li>El FF1 captura el 1 de la entrada (Q1 pasa a 1)</li>
+                        <li>Q2 y Q3 permanecen en 0</li>
+                    </ul>
+                </li>
+                <li><strong>En t3:</strong> La entrada de datos cambia a 0.</li>
+                <li><strong>En t4 (segundo flanco descendente):</strong>
+                    <ul>
+                        <li>El FF1 captura el 0 de la entrada (Q1 pasa a 0)</li>
+                        <li>El FF2 captura el 1 que estaba en Q1 (Q2 pasa a 1)</li>
+                        <li>Q3 permanece en 0</li>
+                    </ul>
+                </li>
+                <li><strong>En t5:</strong> La entrada de datos cambia a 1.</li>
+                <li><strong>En t6 (tercer flanco descendente):</strong>
+                    <ul>
+                        <li>El FF1 captura el 1 de la entrada (Q1 pasa a 1)</li>
+                        <li>El FF2 captura el 0 que estaba en Q1 (Q2 pasa a 0)</li>
+                        <li>El FF3 captura el 1 que estaba en Q2 (Q3 pasa a 1)</li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <p><strong>Observación importante:</strong> Los cambios en las salidas Q ocurren <em>únicamente</em> en los flancos descendentes de reloj (transición de alto a bajo). En los demás momentos, los flip-flops mantienen sus estados anteriores independientemente de los cambios en las entradas.</p>
+        </div>
+    </section>
+    
+    <section id="interactividad">
+        <h2>4. Interactividad y Explicaciones Detalladas</h2>
+        
+        <p>A continuación, puede interactuar con una simulación del registro de desplazamiento. Use los controles para ver cómo los datos se mueven a través de los flip-flops en cada ciclo de reloj.</p>
+        
+        <div class="controles">
+            <button id="btnReset">Reiniciar</button>
+            <button id="btnStep">Paso (Ciclo de Reloj)</button>
+            <button id="btnAutomatic">Simulación Automática</button>
+            <button id="btnStop" disabled>Detener</button>
+        </div>
+        
+        <div class="checkbox-container">
+            <input type="checkbox" id="inputBit">
+            <label for="inputBit">Valor de entrada (1 = Marcado, 0 = Desmarcado)</label>
+        </div>
+        
+        <div class="slider-container">
+            <label for="velocidad">Velocidad de la simulación automática:</label>
+            <input type="range" id="velocidad" min="100" max="2000" step="100" value="1000">
+            <span id="velocidadValor">1000 ms</span>
+        </div>
+        
+        <!-- Contenedor para la visualización interactiva -->
+        <div id="simulacionContainer" style="width: 100%; height: 300px; position: relative; margin: 20px auto; border: 1px solid #ddd; border-radius: 8px;">
+            <!-- El contenido SVG se generará dinámicamente mediante JavaScript -->
+        </div>
+        
+        <div>
+            <h3>Explicación del Comportamiento:</h3>
+            <p>Esta simulación interactiva muestra cómo funciona un registro de desplazamiento de 3 bits con flip-flops tipo D activados por flanco descendente:</p>
+            
+            <ol>
+                <li><strong>Entrada de Datos:</strong> Use la casilla de verificación para establecer el valor de entrada (1 o 0) que será capturado por el primer flip-flop en el próximo flanco descendente.</li>
+                <li><strong>Ciclo de Reloj:</strong> Presione el botón "Paso" para simular un ciclo completo de reloj. En el flanco descendente (cuando la señal de reloj pasa de alto a bajo), los datos se desplazan a través del registro.</li>
+                <li><strong>Visualización:</strong> Observe cómo cada bit se propaga de un flip-flop al siguiente en cada ciclo de reloj. Los LEDs indicadores muestran visualmente el estado actual de cada flip-flop.</li>
+            </ol>
+            
+            <p><strong>Ejemplo paso a paso:</strong></p>
+            <ol>
+                <li>Reinicie la simulación (todos los flip-flops en 0)</li>
+                <li>Marque la casilla para establecer la entrada a 1</li>
+                <li>Pulse "Paso" y observe cómo el bit 1 se carga en el FF1 mientras que FF2 y FF3 permanecen en 0</li>
+                <li>Desmarque la casilla para cambiar la entrada a 0</li>
+                <li>Pulse "Paso" nuevamente y observe cómo el 1 se desplaza al FF2, FF1 ahora tiene un 0, y FF3 sigue en 0</li>
+                <li>Pulse "Paso" una vez más y observe cómo el 1 se desplaza finalmente al FF3</li>
+            </ol>
+            
+            <p>Este comportamiento ilustra perfectamente cómo un registro de desplazamiento funciona como una "línea de montaje digital", moviendo bits secuencialmente a través del sistema.</p>
+        </div>
+    </section>
+    
+    <section id="recursos">
+        <h2>5. Sección de Recursos y Sugerencias Adicionales</h2>
+        
+        <div class="faq">
+            <h3>Preguntas Frecuentes</h3>
+            
+            <details>
+                <summary>¿Por qué es importante el flanco descendente en los flip-flops?</summary>
+                <p>Los flip-flops pueden diseñarse para activarse tanto por flanco ascendente como descendente. La elección depende de los requisitos del sistema. El flanco descendente (transición de alto a bajo) proporciona ciertas ventajas en algunas aplicaciones:</p>
+                <ul>
+                    <li>Mejor inmunidad al ruido en ciertos entornos</li>
+                    <li>
