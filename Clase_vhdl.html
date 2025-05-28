@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VHDL Básico - Intermedio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+            color: #2c3e50 !important;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+        }
+        
+        .module-card {
+            transition: transform 0.3s ease;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .code-block {
+            background-color: #2d3748;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        
+        .code-block pre {
+            margin: 0;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .concept-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .tip-box {
+            background-color: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .exercise-box {
+            background-color: #f0f8f0;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+        
+        .content-section {
+            padding: 30px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .content-section:last-child {
+            border-bottom: none;
+        }
+        
+        .nav-link.active {
+            background-color: #007bff !important;
+            color: white !important;
+        }
+        
+        .pin-diagram {
+            background-color: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#inicio">VHDL GAL22V10</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#fundamentos">Fundamentos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#combinacional">Combinacional</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#avanzado">Avanzado</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#secuencial">Secuencial</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#proyectos">Proyectos</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-4">Curso VHDL Básico</h1>
+                    <h2 class="h4 mb-4">GAL22V10 con ISP Lever</h2>
+                    <p class="lead mb-4">Aprende VHDL desde cero con ejemplos prácticos y código sin errores, específicamente diseñado para dispositivos GAL22V10.</p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <div class="pin-diagram">
+                        <h5>GAL22V10</h5>
+                        <small>22 pines, 10 salidas configurables</small>
+                        <div class="mt-2">
+                            <small class="text-muted">Ideal para lógica combinacional y secuencial básica</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 col-xl-2 d-none d-lg-block">
+                <div class="sidebar p-3">
+                    <nav class="nav flex-column">
+                        <a class="nav-link" href="#que-es-vhdl">¿Qué es VHDL?</a>
+                        <a class="nav-link" href="#estructura-basica">Estructura Básica</a>
+                        <a class="nav-link" href="#tipos-datos">Tipos de Datos</a>
+                        <a class="nav-link" href="#compuertas-basicas">Compuertas Básicas</a>
+                        <a class="nav-link" href="#multiplexores">Multiplexores</a>
+                        <a class="nav-link" href="#decodificadores">Decodificadores</a>
+                        <a class="nav-link" href="#sumadores">Sumadores</a>
+                        <a class="nav-link" href="#comparadores">Comparadores</a>
+                        <a class="nav-link" href="#flip-flops">Flip-Flops</a>
+                        <a class="nav-link" href="#contadores">Contadores</a>
+                        <a class="nav-link" href="#maquinas-estado">Máquinas de Estado</a>
+                        <a class="nav-link" href="#proyecto-semaforo">Proyecto Semáforo</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9 col-xl-10">
+                <div class="p-4">
+
+                    <!-- Módulo 1: Fundamentos -->
+                    <section id="fundamentos" class="content-section">
+                        <h2 class="mb-4">Módulo 1: Fundamentos de VHDL</h2>
+
+                        <div id="que-es-vhdl">
+                            <h3>¿Qué es VHDL?</h3>
+                            <div class="concept-box">
+                                <p><strong>VHDL</strong> (VHSIC Hardware Description Language) es un lenguaje de descripción de hardware que nos permite diseñar circuitos digitales mediante código.</p>
+                                <p><strong>GAL22V10</strong> es un dispositivo lógico programable con 22 pines y 10 salidas configurables, ideal para implementar lógica combinacional y secuencial básica.</p>
+                            </div>
+                        </div>
+
+                        <div id="estructura-basica">
+                            <h3>Estructura Básica de un Archivo VHDL</h3>
+                            <p>Todo archivo VHDL tiene tres partes principales:</p>
+                            <ul>
+                                <li><strong>Librerías:</strong> Importan funcionalidades necesarias</li>
+                                <li><strong>Entidad (Entity):</strong> Define las entradas y salidas</li>
+                                <li><strong>Arquitectura (Architecture):</strong> Describe el comportamiento interno</li>
+                            </ul>
+
+                            <div class="code-block">
+                                <pre>-- Ejemplo básico: Inversor (NOT)
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Entidad: define puertos de entrada y salida
+entity inversor is
+    Port ( 
+        entrada : in  STD_LOGIC;   -- Pin de entrada
+        salida  : out STD_LOGIC    -- Pin de salida
+    );
+end inversor;
+
+-- Arquitectura: describe el comportamiento
+architecture Behavioral of inversor is
+begin
+    -- Asignación concurrente simple
+    salida <= not entrada;
+end Behavioral;</pre>
+                            </div>
+
+                            <div class="tip-box">
+                                <strong>💡 Tip:</strong> Los comentarios en VHDL empiezan con "--" y son esenciales para documentar tu código.
+                            </div>
+                        </div>
+
+                        <div id="tipos-datos">
+                            <h3>Tipos de Datos Básicos</h3>
+                            <div class="concept-box">
+                                <ul>
+                                    <li><strong>STD_LOGIC:</strong> Un solo bit ('0', '1', 'Z', 'X', etc.)</li>
+                                    <li><strong>STD_LOGIC_VECTOR:</strong> Conjunto de bits (buses)</li>
+                                    <li><strong>INTEGER:</strong> Números enteros (para contadores, etc.)</li>
+                                </ul>
+                            </div>
+
+                            <div class="code-block">
+                                <pre>-- Ejemplos de declaración de señales
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity ejemplo_tipos is
+    Port ( 
+        -- Señales individuales
+        clk     : in  STD_LOGIC;
+        reset   : in  STD_LOGIC;
+        enable  : in  STD_LOGIC;
+        
+        -- Buses (vectores)
+        data_in  : in  STD_LOGIC_VECTOR(3 downto 0);  -- 4 bits
+        data_out : out STD_LOGIC_VECTOR(7 downto 0)   -- 8 bits
+    );
+end ejemplo_tipos;
+
+architecture Behavioral of ejemplo_tipos is
+    -- Señales internas
+    signal contador : INTEGER range 0 to 15 := 0;
+    signal temp     : STD_LOGIC_VECTOR(3 downto 0);
+begin
+    -- El código de comportamiento va aquí
+end Behavioral;</pre>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Módulo 2: Lógica Combinacional -->
+                    <section id="combinacional" class="content-section">
+                        <h2 class="mb-4">Módulo 2: Lógica Combinacional Básica</h2>
+
+                        <div id="compuertas-basicas">
+                            <h3>Compuertas Lógicas Básicas</h3>
+                            <p>Las compuertas lógicas son los bloques fundamentales de cualquier circuito digital.</p>
+
+                            <div class="code-block">
+                                <pre>-- Compuertas lógicas básicas
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity compuertas_basicas is
+    Port ( 
+        A, B : in  STD_LOGIC;
+        Y_AND    : out STD_LOGIC;
+        Y_OR     : out STD_LOGIC;
+        Y_XOR    : out STD_LOGIC;
+        Y_NAND   : out STD_LOGIC;
+        Y_NOR    : out STD_LOGIC
+    );
+end compuertas_basicas;
+
+architecture Behavioral of compuertas_basicas is
+begin
+    -- Asignaciones concurrentes
+    Y_AND  <= A and B;      -- Compuerta AND
+    Y_OR   <= A or B;       -- Compuerta OR
+    Y_XOR  <= A xor B;      -- Compuerta XOR
+    Y_NAND <= not(A and B); -- Compuerta NAND
+    Y_NOR  <= not(A or B);  -- Compuerta NOR
+end Behavioral;</pre>
+                            </div>
+
+                            <div class="exercise-box">
+                                <h5>🏋️ Ejercicio 1:</h5>
+                                <p>Implementa una compuerta XNOR usando las operaciones básicas.</p>
+                                <details>
+                                    <summary>Ver solución</summary>
+                                    <div class="code-block mt-2">
+                                        <pre>Y_XNOR <= not(A xor B);  -- Método directo
+-- O también:
+Y_XNOR <= (A and B) or (not A and not B);  -- Usando AND y OR</pre>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <div id="multiplexores">
+                            <h3>Multiplexores</h3>
+                            <p>Un multiplexor selecciona una de varias entradas basándose en señales de control.</p>
+
+                            <div class="code-block">
+                                <pre>-- Multiplexor 4:1 
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity mux_4_1 is
+    Port ( 
+        I0, I1, I2, I3 : in  STD_LOGIC;        -- 4 entradas
+        SEL            : in  STD_LOGIC_VECTOR(1 downto 0); -- 2 bits de selección
+        Y              : out STD_LOGIC         -- Salida
+    );
+end mux_4_1;
+
+architecture Behavioral of mux_4_1 is
+begin
+    -- Implementación usando WHEN-ELSE
+    Y <= I0 when SEL = "00" else
+         I1 when SEL = "01" else
+         I2 when SEL = "10" else
+         I3 when SEL = "11" else
+         '0'; -- Valor por defecto (nunca debería ocurrir)
+end Behavioral;</pre>
+                            </div>
+
+                            <div class="code-block">
+                                <pre>-- Alternativa usando WITH-SELECT
+architecture Behavioral_Alt of mux_4_1 is
+begin
+    with SEL select
+        Y <= I0 when "00",
+             I1 when "01",
+             I2 when "10",
+             I3 when "11",
+             '0' when others;
+end Behavioral_Alt;</pre>
+                            </div>
+
+                            <div class="warning-box">
+                                <strong>⚠️ Importante:</strong> Siempre incluye una condición "others" o "else" para evitar latches no deseados.
+                            </div>
+                        </div>
+
+                        <div id="decodificadores">
+                            <h3>Decodificadores</h3>
+                            <p>Un decodificador activa una salida específica basándose en la entrada binaria.</p>
+
+                            <div class="code-block">
+                                <pre>-- Decodificador 2:4 (2 entradas, 4 salidas)
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity decoder_2_4 is
+    Port ( 
+        INPUT  : in  STD_LOGIC_VECTOR(1 downto 0);  -- 2 bits de entrada
+        ENABLE : in  STD_LOGIC;                     -- Señal de habilitación
+        OUTPUT : out STD_LOGIC_VECTOR(3 downto 0)   -- 4 salidas
+    );
+end decoder_2_4;
+
+architecture Behavioral of decoder_2_4 is
+begin
+    process(INPUT, ENABLE)
+    begin
+        if ENABLE = '1' then
+            case INPUT is
+                when "00" => OUTPUT <= "0001";  -- Solo salida 0 activa
+                when "01" => OUTPUT <= "0010";  -- Solo salida 1 activa
+                when "10" => OUTPUT <= "0100";  -- Solo salida 2 activa
+                when "11" => OUTPUT <= "1000";  -- Solo salida 3 activa
+                when others => OUTPUT <= "0000";
+            end case;
+        else
+            OUTPUT <= "0000";  -- Todas las salidas desactivadas
+        end if;
+    end process;
+end Behavioral;</pre>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Módulo 3: Lógica Combinacional Avanzada -->
+                    <section id="avanzado" class="content-section">
+                        <h2 class="mb-4">Módulo 3: Lógica Combinacional Avanzada</h2>
+
+                        <div id="sumadores">
+                            <h3>Sumadores</h3>
+                            <p>Los sumadores son circuitos que realizan operaciones aritméticas básicas.</p>
+
+                            <div class="code-block">
+                                <pre>-- Sumador completo de 1 bit
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity sumador_completo is
+    Port ( 
+        A, B, Cin : in  STD_LOGIC;  -- Dos operandos y acarreo de entrada
+        Sum, Cout : out STD_LOGIC   -- Suma y acarreo de salida
+    );
+end sumador_completo;
+
+architecture Behavioral of sumador_completo is
+begin
+    -- Lógica del sumador completo
+    Sum  <= A xor B xor Cin;              -- Suma
+    Cout <= (A and B) or (Cin and (A xor B)); -- Acarreo
+end Behavioral;</pre>
+                            </div>
+
+                            <div class="code-block">
+                                <pre>-- Sumador de 4 bits
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity sumador_4bits is
+    Port ( 
+        A, B : in  STD_LOGIC_VECTOR(3 downto 0);  -- Operandos de 4 bits
+        Cin  : in  STD_LOGIC;                     -- Acarreo inicial
+        Sum  : out STD_LOGIC_VECTOR(3 downto 0);  -- Resultado
+        Cout : out STD_LOGIC                      -- Acarreo final
+    );
+end sumador_4bits;
+
+architecture Behavioral of sumador_4bits is
+    signal carry : STD_LOGIC_VECTOR(4 downto 0); -- Acarreos internos
+begin
+    carry(0) <= Cin; -- Acarreo inicial
+    
+    -- Generar 4 sumadores completos
+    gen_sum: for i in 0 to 3 generate
+        Sum(i) <= A(i) xor B(i) xor carry(i);
+        carry(i+1) <= (A(i) and B(i)) or (carry(i) and (A(i) xor B(i)));
+    end generate;
+    
+    Cout <= carry(4); -- Acarreo final
+end Behavioral;</pre>
+                            </div>
+                        </div>
+
+                        <div id="comparadores">
+                            <h3>Comparadores</h3>
+                            <p>Los comparadores determinan la relación entre dos números.</p>
+
+                            <div class="code-block">
+                                <pre>-- Comparador de 4 bits
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity comparador_4bits is
+    Port ( 
+        A, B : in  STD_LOGIC_VECTOR(3 downto 0);  -- Números a comparar
+        IGUAL   : out STD_LOGIC;                   -- A = B
+        MAYOR   : out STD_LOGIC;                   -- A > B
+        MENOR   : out STD_LOGIC                    -- A < B
+    );
+end comparador_4bits;
+
+architecture Behavioral of comparador_4bits is
+begin
+    process(A, B)
+    begin
+        -- Inicializar todas las salidas
+        IGUAL <= '0';
+        MAYOR <= '0';
+        MENOR <= '0';
+        
+        -- Comparar bit por bit, empezando por el más significativo
+        if A = B then
+            IGUAL <= '1';
+        elsif A > B then
+            MAYOR <= '1';
+        else
+            MENOR <= '1';
+        end if;
+    end process;
+end Behavioral;</pre>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Módulo 4: Lógica Secuencial -->
+                    <section id="secuencial" class="content-section">
+                        <h2 class="mb-4">Módulo 4: Lógica Secuencial</h2>
+
+                        <div id="flip-flops">
+                            <h3>Flip-Flops D</h3>
+                            <p>Los flip-flops son elementos de memoria básicos que almacenan un bit de información.</p>
+
+                            <div class="code-block">
+                                <pre>-- Flip-Flop D básico con reset
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity flip_flop_d is
+    Port ( 
+        CLK   : in  STD_LOGIC;  -- Señal de reloj
+        RESET : in  STD_LOGIC;  -- Reset asíncrono
+        D     : in  STD_LOGIC;  -- Entrada de datos
+        Q     : out STD_LOGIC   -- Salida
+    );
+end flip_flop_d;
+
+architecture Behavioral of flip_flop_d is
+begin
+    process(CLK, RESET)
+    begin
+        if RESET = '1' then
+            Q <= '0';  -- Reset asíncrono
+        elsif rising_edge(CLK) then
+            Q <= D;    -- Captura el dato en flanco positivo
+        end if;
+    end process;
+end Behavioral;</pre>
+                            </div>
+
+                            <div class="code-block">
+                                <pre>-- Registro de 8 bits
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity registro_8bits is
+    Port ( 
+        CLK    : in  STD_LOGIC;                     -- Reloj
+        RESET  : in  STD_LOGIC;                     -- Reset
+        ENABLE : in  STD_LOGIC;                     -- Habilitación
+        D      : in  STD_LOGIC_VECTOR(7 downto 0); -- Entrada de datos
+        Q      : out STD_LOGIC_VECTOR(7 downto 0)  -- Salida
+    );
+end registro_8bits;
+
+architecture Behavioral of registro_8bits is
+begin
+    process(CLK, RESET)
+    begin
+        if RESET = '1' then
+            Q <= (others => '0');  -- Reset todos los bits a '0'
+        elsif rising_edge(CLK) then
+            if ENABLE = '1' then
+                Q <= D;  -- Cargar datos solo si está habilitado
+            end if;
+        end if;
+    end process;
+end Behavioral;</pre>
+                            </div>
+                        </div>
+
+                        <div id="contadores">
+                            <h3>Contadores</h3>
+                            <p>Los contadores son circuitos secuenciales que generan secuencias numéricas.</p>
+
+                            <div class="code-block">
+                                <pre>-- Contador binario de 4 bits
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity contador_4bits is
+    Port ( 
+        CLK    : in  STD_LOGIC;                     -- Reloj
+        RESET  : in  STD_LOGIC;                     -- Reset
+        ENABLE : in  STD_LOGIC;                     -- Habilitación
+        COUNT  : out STD_LOGIC_VECTOR(3 downto 0)  -- Salida del contador
+    );
+end contador_4bits;
+
+architecture Behavioral of contador_4bits is
+    signal counter : UNSIGNED(3 downto 0) := (others => '0');
+begin
+    process(CLK, RESET)
+    begin
+        if RESET = '1' then
+            counter <= (others => '0');  -- Reset a 0
+        elsif rising_edge(CLK) then
+            if ENABLE = '1' then
+                counter <= counter + 1;  -- Incrementar contador
+            end if;
+        end if;
+    end process;
+    
+    COUNT <= STD_LOGIC_VECTOR(counter);  -- Conversión de tipo
+end Behavioral;</pre>
+                            </div>
+
+                            <div class="code-block">
+                                <pre>-- Contador BCD (0-9)
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity contador_bcd is
+    Port ( 
+        CLK     : in  STD_LOGIC;                     -- Reloj
+        RESET   : in  STD_LOGIC;                     -- Reset
+        ENABLE  : in  STD_LOGIC;                     -- Habilitación
+        BCD_OUT : out STD_LOGIC_VECTOR(3 downto 0); -- Salida BCD
+        CARRY   : out STD_LOGIC                      -- Acarreo (cuando llega a 9)
+    );
+end contador_bcd;
+
+architecture Behavioral of contador_bcd is
+    signal counter : UNSIGNED(3 downto 0) := (others => '0');
+begin
+    process(CLK, RESET)
+    begin
+        if RESET = '1' then
+            counter <= (others => '0');
+        elsif rising_edge(CLK) then
+            if ENABLE = '1' then
+                if counter = 9 then
+                    counter <= (others => '0');  -- Reiniciar a 0 después de 9
+                else
+                    counter <= counter + 1;
+                end if;
+            end if;
+        end if;
+    end process;
+    
+    BCD_OUT <= STD_LOGIC_VECTOR(counter);
+    CARRY <= '1' when counter = 9 and ENABLE = '1' else '0';
+end Behavioral;</pre>
+                            </div>
+                        </div>
+
+                        <div id="maquinas-estado">
+                            <h3>Máquinas de Estado Finito</h3>
+                            <p>Las máquinas de estado controlan secuencias de operaciones complejas.</p>
+
+                            <div class="code-block">
+                                <pre>-- Máquina de estado para control de LED intermitente
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity led_intermitente is
+    Port ( 
+        CLK   : in  STD_LOGIC;  -- Reloj principal
+        RESET : in  STD_LOGIC;  -- Reset
+        LED   : out STD_LOGIC   -- LED de salida
+    );
+end led_intermitente;
+
+architecture Behavioral of led_intermitente is
+    type estado_type is (APAGADO, ENCENDIDO);
+    signal estado_actual, estado_siguiente : estado_type;
+    signal contador : UNSIGNED(23 downto 0) := (others => '0');
+    constant MAX_COUNT : UNSIGNED(23 downto 0) := to_unsigned(12500000, 24); -- Para 1 segundo @ 25MHz
+    signal tick : STD_LOGIC;
+begin
+    -- Divisor de frecuencia
+    process(CLK, RESET)
+    begin
+        if RESET = '1' then
+            contador <= (others => '0');
+            tick <= '0';
+        elsif rising_edge(CLK) then
+            if contador = MAX_COUNT then
+                contador <= (others => '0');
+                tick <= '1';
+            else
+                contador <= contador + 1;
+                tick <= '0';
+            end if;
+        end if;
+    end process;
+    
+    -- Registro de estado
+    process(CLK, RESET)
+    begin
+        if RESET = '1' then
+            estado_actual <= APAGADO;
+        elsif rising_edge(CLK) then
+            estado_actual <= estado_siguiente;
+        end if;
+    end process;
+    
+    -- Lógica de transición de estados
+    process(estado_actual, tick)
+    begin
+        case estado_actual is
+            when APAGADO =>
+                if tick = '1' then
+                    estado_siguiente <= ENCENDIDO;
+                else
+                    estado_siguiente <= APAGADO;
+                end if;
+                
+            when ENCENDIDO =>
+                if tick = '1' then
+                    estado_siguiente <= APAGADO;
+                else
+                    estado_siguiente <= ENCENDIDO;
+                end if;
+        end case;
+    end process;
+    
+    -- Lógica de salida
+    LED <= '1' when estado_actual = ENCENDIDO else '0';
+end Behavioral;</pre>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Módulo 5: Proyecto Completo -->
+                    <section id="proyectos" class="content-section">
+                        <h2 class="mb-4">Módulo 5: Proyecto Completo - Semáforo</h2>
+
+                        <div id="proyecto-semaforo">
+                            <h3>Proyecto: Semáforo de 2 Vías</h3>
+                            <p>Implementaremos un semáforo completo que controla el tráfico en una intersección de 2 vías.</p>
+
+                            <div class="concept-box">
+                                <h5>Especificaciones del Semáforo:</h5>
+                                <ul>
+                                    <li><strong>Vía Principal:</strong> Verde 30s → Amarillo 5s → Rojo 35s</li>
+                                    <li><strong>Vía Secundaria:</strong> Verde 25s → Amarillo 5s → Rojo 40s</li>
+                                    <li><strong>Botón de emergencia:</strong> Pone ambos semáforos en rojo</li>
+                                    <li><strong>Modo manual:</strong> Control manual de los estados</li>
+                                </ul>
+                            </div>
+
+                            <div class="code-block">
+                                <pre>-- Semáforo de 2 vías con control automático y manual
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity semaforo_2_vias is
+    Port ( 
+        CLK         : in  STD_LOGIC;  -- Reloj principal (1 Hz)
+        RESET       : in  STD_LOGIC;  -- Reset general
+        EMERGENCIA  : in  STD_LOGIC;  -- Botón de emergencia
+        MODO_MANUAL : in  STD_LOGIC;  -- Selector automático/manual
+        BOTON_CAMBIO: in  STD_LOGIC;  -- Botón para cambio manual
+        
+        -- Semáforo Vía Principal
+        ROJO_PRIN   : out STD_LOGIC;
+        AMARILLO_PRIN: out STD_LOGIC;
+        VERDE_PRIN  : out STD_LOGIC;
+        
+        -- Semáforo Vía Secundaria  
+        ROJO_SEC    : out STD_LOGIC;
+        AMARILLO_SEC: out STD_LOGIC;
+        VERDE_SEC   : out STD_LOGIC;
+        
+        -- Indicadores de estado
+        ESTADO_ACTUAL: out STD_LOGIC_VECTOR(2 downto 0)
+    );
+end semaforo_2_vias;
+
+architecture Behavioral of semaforo_2_vias is
+    -- Definición de estados
+    type estado_semaforo is (
+        PRIN_VERDE_SEC_ROJO,     -- Estado 0: Principal Verde, Secundaria Rojo
+        PRIN_AMARILLO_SEC_ROJO,  -- Estado 1: Principal Amarillo, Secundaria Rojo  
+        PRIN_ROJO_SEC_VERDE,     -- Estado 2: Principal Rojo, Secundaria Verde
+        PRIN_ROJO_SEC_AMARILLO,  -- Estado 3: Principal Rojo, Secundaria Amarillo
+        EMERGENCIA_TOTAL         -- Estado 4: Emergencia - Ambos Rojos
+    );
+    
+    signal estado_actual, estado_siguiente : estado_semaforo := PRIN_VERDE_SEC_ROJO;
+    
+    -- Contadores de tiempo
+    signal contador_tiempo : UNSIGNED(5 downto 0) := (others => '0');
+    signal tiempo_limite : UNSIGNED(5 downto 0);
+    
+    -- Señales de control
+    signal cambio_estado : STD_LOGIC := '0';
+    signal boton_anterior : STD_LOGIC := '0';
+    signal flanco_boton : STD_LOGIC := '0';
+    
+begin
+    -- Detección de flanco positivo del botón manual
+    process(CLK, RESET)
+    begin
+        if RESET = '1' then
+            boton_anterior <= '0';
+            flanco_boton <= '0';
+        elsif rising_edge(CLK) then
+            boton_anterior <= BOTON_CAMBIO;
+            flanco_boton <= BOTON_CAMBIO and not boton_anterior;
+        end if;
+    end process;
+    
+    -- Definir tiempos límite para cada estado
+    process(estado_actual)
+    begin
+        case estado_actual is
+            when PRIN_VERDE_SEC_ROJO =>
+                tiempo_limite <= to_unsigned(30, 6);  -- 30 segundos
+            when PRIN_AMARILLO_SEC_ROJO =>
+                tiempo_limite <= to_unsigned(5, 6);   -- 5 segundos
+            when PRIN_ROJO_SEC_VERDE =>
+                tiempo_limite <= to_unsigned(25, 6);  -- 25 segundos
+            when PRIN_ROJO_SEC_AMARILLO =>
+                tiempo_limite <= to_unsigned(5, 6);   -- 5 segundos
+            when EMERGENCIA_TOTAL =>
+                tiempo_limite <= to_unsigned(10, 6);  -- 10 segundos mínimo
+        end case;
+    end process;
+    
+    -- Contador de tiempo
+    process(CLK, RESET)
+    begin
+        if RESET = '1' then
+            contador_tiempo <= (others => '0');
+            cambio_estado <= '0';
+        elsif rising_edge(CLK) then
+            if estado_actual /= estado_siguiente then
+                -- Reiniciar contador cuando cambia el estado
+                contador_tiempo <= (others => '0');
+                cambio_estado <= '0';
+            elsif contador_tiempo = tiempo_limite then
+                -- Tiempo cumplido, señalar cambio
+                cambio_estado <= '1';
+                contador_tiempo <= (others => '0');
+            else
+                -- Incrementar contador
+                contador_tiempo <= contador_tiempo + 1;
+                cambio_estado <= '0';
+            end if;
+        end if;
+    end process;
+    
+    -- Registro de estado
+    process(CLK, RESET)
+    begin
+        if RESET = '1' then
+            estado_actual <= PRIN_VERDE_SEC_ROJO;
+        elsif rising_edge(CLK) then
+            estado_actual <= estado_siguiente;
+        end if;
+    end process;
+    
+    -- Lógica de transición de estados
+    process(estado_actual, EMERGENCIA, MODO_MANUAL, cambio_estado, flanco_boton)
+    begin
+        -- Por defecto mantener el estado actual
+        estado_siguiente <= estado_actual;
+        
+        -- Emergencia tiene prioridad máxima
+        if EMERGENCIA = '1' then
+            estado_siguiente <= EMERGENCIA_TOTAL;
+        elsif MODO_MANUAL = '1' then
+            -- Modo manual: cambiar solo con botón
+            if flanco_boton = '1' then
+                case estado_actual is
+                    when PRIN_VERDE_SEC_ROJO =>
+                        estado_siguiente <= PRIN_AMARILLO_SEC_ROJO;
+                    when PRIN_AMARILLO_SEC_ROJO =>
+                        estado_siguiente <= PRIN_ROJO_SEC_VERDE;
+                    when PRIN_ROJO_SEC_VERDE =>
+                        estado_siguiente <= PRIN_ROJO_SEC_AMARILLO;
+                    when PRIN_ROJO_SEC_AMARILLO =>
+                        estado_siguiente <= PRIN_VERDE_SEC_ROJO;
+                    when EMERGENCIA_TOTAL =>
+                        estado_siguiente <= PRIN_VERDE_SEC_ROJO;
+                end case;
+            end if;
+        else
+            -- Modo automático: cambiar por tiempo
+            if cambio_estado = '1' then
+                case estado_actual is
+                    when PRIN_VERDE_SEC_ROJO =>
+                        estado_siguiente <= PRIN_AMARILLO_SEC_ROJO;
+                    when PRIN_AMARILLO_SEC_ROJO =>
+                        estado_siguiente <= PRIN_ROJO_SEC_VERDE;
+                    when PRIN_ROJO_SEC_VERDE =>
+                        estado_siguiente <= PRIN_ROJO_SEC_AMARILLO;
+                    when PRIN_ROJO_SEC_AMARILLO =>
+                        estado_siguiente <= PRIN_VERDE_SEC_ROJO;
+                    when EMERGENCIA_TOTAL =>
+                        estado_siguiente <= PRIN_VERDE_SEC_ROJO;
+                end case;
+            end if;
+        end if;
+    end process;
+    
+    -- Lógica de salidas (control de LEDs)
+    process(estado_actual)
+    begin
+        -- Inicializar todas las salidas apagadas
+        ROJO_PRIN <= '0';
+        AMARILLO_PRIN <= '0';
+        VERDE_PRIN <= '0';
+        ROJO_SEC <= '0';
+        AMARILLO_SEC <= '0';
+        VERDE_SEC <= '0';
+        
+        case estado_actual is
+            when PRIN_VERDE_SEC_ROJO =>
+                VERDE_PRIN <= '1';    -- Principal en verde
+                ROJO_SEC <= '1';      -- Secundaria en rojo
+                ESTADO_ACTUAL <= "000";
+                
+            when PRIN_AMARILLO_SEC_ROJO =>
+                AMARILLO_PRIN <= '1'; -- Principal en amarillo
+                ROJO_SEC <= '1';      -- Secundaria en rojo
+                ESTADO_ACTUAL <= "001";
+                
+            when PRIN_ROJO_SEC_VERDE =>
+                ROJO_PRIN <= '1';     -- Principal en rojo
+                VERDE_SEC <= '1';     -- Secundaria en verde
+                ESTADO_ACTUAL <= "010";
+                
+            when PRIN_ROJO_SEC_AMARILLO =>
+                ROJO_PRIN <= '1';     -- Principal en rojo
+                AMARILLO_SEC <= '1';  -- Secundaria en amarillo
+                ESTADO_ACTUAL <= "011";
+                
+            when EMERGENCIA_TOTAL =>
+                ROJO_PRIN <= '1';     -- Ambos en rojo
+                ROJO_SEC <= '1';      -- para emergencia
+                ESTADO_ACTUAL <= "100";
+        end case;
+    end process;
+    
+end Behavioral;</pre>
+                            </div>
+
+                            <div class="tip-box">
+                                <strong>💡 Características del Código:</strong>
+                                <ul>
+                                    <li>Usa máquina de estados para control robusto</li>
+                                    <li>Maneja modo automático y manual</li>
+                                    <li>Implementa emergencia con prioridad máxima</li>
+                                    <li>Contador de tiempo configurable por estado</li>
+                                    <li>Detección de flancos para botones</li>
+                                </ul>
+                            </div>
+
+                            <div class="warning-box">
+                                <strong>⚠️ Configuración para GAL22V10:</strong>
+                                <p>Este diseño usa 9 pines de salida del GAL22V10. Asegúrate de configurar correctamente las asignaciones de pines en ISP Lever.</p>
+                            </div>
+
+                            <div class="code-block">
+                                <pre>-- Ejemplo de asignación de pines para GAL22V10
+-- Pin 1: CLK (entrada)
+-- Pin 2: RESET (entrada) 
+-- Pin 3: EMERGENCIA (entrada)
+-- Pin 4: MODO_MANUAL (entrada)
+-- Pin 5: BOTON_CAMBIO (entrada)
+-- Pin 14: ROJO_PRIN (salida)
+-- Pin 15: AMARILLO_PRIN (salida)
+-- Pin 16: VERDE_PRIN (salida)
+-- Pin 17: ROJO_SEC (salida)
+-- Pin 18: AMARILLO_SEC (salida)
+-- Pin 19: VERDE_SEC (salida)
+-- Pin 20-22: ESTADO_ACTUAL (salidas para debug)</pre>
+                            </div>
+
+                            <div class="concept-box">
+                                <h5>Cómo Probar el Semáforo:</h5>
+                                <ol>
+                                    <li><strong>Modo Automático:</strong> MODO_MANUAL = '0', observa la secuencia automática</li>
+                                    <li><strong>Modo Manual:</strong> MODO_MANUAL = '1', usa BOTON_CAMBIO para avanzar estados</li>
+                                    <li><strong>Emergencia:</strong> EMERGENCIA = '1', ambos semáforos deben ponerse en rojo</li>
+                                    <li><strong>Reset:</strong> RESET = '1', debe volver al estado inicial</li>
+                                </ol>
+                            </div>
+
+                            <h4>Simulación y Testbench</h4>
+                            <div class="code-block">
+                                <pre>-- Testbench para verificar el semáforo
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity tb_semaforo is
+end tb_semaforo;
+
+architecture Behavioral of tb_semaforo is
+    -- Componente a probar
+    component semaforo_2_vias
+        Port ( 
+            CLK         : in  STD_LOGIC;
+            RESET       : in  STD_LOGIC;
+            EMERGENCIA  : in  STD_LOGIC;
+            MODO_MANUAL : in  STD_LOGIC;
+            BOTON_CAMBIO: in  STD_LOGIC;
+            ROJO_PRIN   : out STD_LOGIC;
+            AMARILLO_PRIN: out STD_LOGIC;
+            VERDE_PRIN  : out STD_LOGIC;
+            ROJO_SEC    : out STD_LOGIC;
+            AMARILLO_SEC: out STD_LOGIC;
+            VERDE_SEC   : out STD_LOGIC;
+            ESTADO_ACTUAL: out STD_LOGIC_VECTOR(2 downto 0)
+        );
+    end component;
+    
+    -- Señales de test
+    signal clk_tb : STD_LOGIC := '0';
+    signal reset_tb : STD_LOGIC := '0';
+    signal emergencia_tb : STD_LOGIC := '0';
+    signal modo_manual_tb : STD_LOGIC := '0';
+    signal boton_cambio_tb : STD_LOGIC := '0';
+    
+    -- Salidas
+    signal rojo_prin_tb : STD_LOGIC;
+    signal amarillo_prin_tb : STD_LOGIC;
+    signal verde_prin_tb : STD_LOGIC;
+    signal rojo_sec_tb : STD_LOGIC;
+    signal amarillo_sec_tb : STD_LOGIC;
+    signal verde_sec_tb : STD_LOGIC;
+    signal estado_tb : STD_LOGIC_VECTOR(2 downto 0);
+    
+begin
+    -- Instanciar el componente
+    UUT: semaforo_2_vias
+        Port map (
+            CLK => clk_tb,
+            RESET => reset_tb,
+            EMERGENCIA => emergencia_tb,
+            MODO_MANUAL => modo_manual_tb,
+            BOTON_CAMBIO => boton_cambio_tb,
+            ROJO_PRIN => rojo_prin_tb,
+            AMARILLO_PRIN => amarillo_prin_tb,
+            VERDE_PRIN => verde_prin_tb,
+            ROJO_SEC => rojo_sec_tb,
+            AMARILLO_SEC => amarillo_sec_tb,
+            VERDE_SEC => verde_sec_tb,
+            ESTADO_ACTUAL => estado_tb
+        );
+    
+    -- Generar reloj de 1 Hz (período de 1 segundo)
+    clk_tb <= not clk_tb after 500 ms;
+    
+    -- Proceso de estímulos
+    process
+    begin
+        -- Reset inicial
+        reset_tb <= '1';
+        wait for 2 sec;
+        reset_tb <= '0';
+        
+        -- Modo automático por 100 segundos
+        modo_manual_tb <= '0';
+        wait for 100 sec;
+        
+        -- Probar modo manual
+        modo_manual_tb <= '1';
+        wait for 5 sec;
+        
+        -- Pulsos de botón manual
+        for i in 1 to 10 loop
+            boton_cambio_tb <= '1';
+            wait for 1 sec;
+            boton_cambio_tb <= '0';
+            wait for 3 sec;
+        end loop;
+        
+        -- Probar emergencia
+        emergencia_tb <= '1';
+        wait for 15 sec;
+        emergencia_tb <= '0';
+        
+        wait;
+    end process;
+    
+end Behavioral;</pre>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="content-section">
+                        <h2>UNIVERSIDAD ADVENTISTA DE BOLIVIA</h2>
+                        <div class="concept-box">
+                            <h4>Edilson Laura - ediquin</h4>
+                            <h4>Sistemas Digitales II</h4>
+                            
+                        </div>
+                        
+                        <div class="tip-box">
+                            <strong>🎯 Próximos Pasos:</strong>
+                            <p>Ahora estás listo para el siguiente curso donde aprenderás sobre funciones, procedimientos, packages y técnicas avanzadas de VHDL.</p>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Smooth scrolling para enlaces internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+        
+        // Actualizar navegación activa
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar .nav-link');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
